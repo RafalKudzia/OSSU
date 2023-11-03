@@ -1,0 +1,104 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+
+/**
+ * The Hack CPU (Central Processing unit), consisting of an ALU,
+ * two registers named A and D, and a program counter named PC.
+ * The CPU is designed to fetch and execute instructions written in 
+ * the Hack machine language. In particular, functions as follows:
+ * Executes the inputted instruction according to the Hack machine 
+ * language specification. The D and A in the language specification
+ * refer to CPU-resident registers, while M refers to the external
+ * memory location addressed by A, i.e. to Memory[A]. The inM input 
+ * holds the value of this location. If the current instruction needs 
+ * to write a value to M, the value is placed in outM, the address 
+ * of the target location is placed in the addressM output, and the 
+ * writeM control bit is asserted. (When writeM==0, any value may 
+ * appear in outM). The outM and writeM outputs are combinational: 
+ * they are affected instantaneously by the execution of the current 
+ * instruction. The addressM and pc outputs are clocked: although they 
+ * are affected by the execution of the current instruction, they commit 
+ * to their new values only in the next time step. If reset==1 then the 
+ * CPU jumps to address 0 (i.e. pc is set to 0 in next time step) rather 
+ * than to the address resulting from executing the current instruction. 
+ */
+
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to re-start the current
+                         // program (reset==1) or continue executing
+                         // the current program (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // address of next instruction
+
+    PARTS:
+    // Put your code here:
+	
+		
+	//MUXs
+	Mux16(a=outAD ,b=instruction ,sel=muxAins ,out=toAregister);		//Mux to A register
+	Mux16(a=outAregister,b=inM,sel=muxALUinst ,out=toALUAM);							//Mux to ALU
+	
+	//ALU
+	ALU(x=toALUD,y=toALUAM,zx=instruction[11] ,nx=instruction[10] ,zy=instruction[9] ,ny=instruction[8] ,f=instruction[7] ,no=instruction[6],out=outAD,out=outM,zr=zr,ng=ng);
+	
+	//Registers
+	ARegister(in=toAregister,load=loadA ,out=outAregister,out[0..14]=addressM); //A register
+	DRegister(in=outAD ,load=loadD ,out=toALUD);							//D register
+	PC(in=outAregister,load=loadPC ,inc=inc ,reset=reset ,out[0..14]=pc);		//PC register
+	
+	//Logic decoder
+	Not(in=instruction[15],out=muxAins);  // decode A or C instruction
+	And(a=instruction[15],b=instruction[5],out=loadAA);		//if C-inst and d1 >> load A register
+	Or(a=muxAins,b=loadAA,out=loadA);
+	
+	And(a=instruction[15],b=instruction[4],out=loadD);  	//if C-inst and d2 >> load D register
+	
+	And(a=instruction[15],b=instruction[3],out=writeM);	//if C-inst and d3 >> load Memory
+	
+	And(a=instruction[15],b=instruction[12],out=muxALUinst);// switch mux to ALU
+	
+	//logic PC
+	
+	Not(in=zr,out=notZR);
+	Not(in=ng,out=notNG);
+	And(a=notNG,b=notZR,out=outNotNGnotZR);
+	And(a=ng,b=notZR,out=outNGnotZR);
+	And(a=notNG,b=zr,out=outZRnotNG);
+	And(a=ng,b=zr,out=outNGzr);
+	
+	
+	
+	
+	And(a=instruction[0],b=instruction[1],out=out1);	//JMP
+	And(a=instruction[2],b=out1,out=JMP);
+	
+	And(a=outNotNGnotZR,b=instruction[0],out=JGT);		//JGT
+	
+	And(a=outZRnotNG,b=instruction[1],out=JEQ);		//JEQ
+	
+	And(a=outNGnotZR,b=instruction[2],out=JLT);		//JLT
+	
+	And(a=out1,b=notNG,out=JGE);						//JGE
+	
+	And(a=instruction[0],b=instruction[2],out=out2);	//JNE
+	And(a=out2,b=notZR,out=JNE);
+	
+	And(a=instruction[1],b=instruction[2],out=out3);	//JLE
+	Or(a=zr,b=ng,out=orNGzr);
+	And(a=out3,b=orNGzr,out=JLE);
+	
+	
+	Or8Way(in[0]=JMP ,in[1]=JGT ,in[2]=JEQ ,in[3]=JLT ,in[4]=JGE ,in[5]=JNE ,in[6]=JLE ,in[7]=false,out=outOr); 	// in this 3 lines we check if is it c-instruction
+	And(a=outOr,b=instruction[15],out=loadPC);																	// and we have a jump condition load PC
+	Not(in=loadPC,out=inc); 																					// or increment PC
+
+
+}
