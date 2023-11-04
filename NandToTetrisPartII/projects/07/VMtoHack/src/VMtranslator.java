@@ -25,18 +25,22 @@ public class VMtranslator {
 
     void run() throws IOException {
 
-        Parser parser = new Parser();
-        CodeWriter codeWriter = new CodeWriter();
+
 
         file = new File(FILENAME);                          // utworzenie readera do odczytu pliku .vm
-        br =new BufferedReader(new FileReader(file));
+        FileReader fr =new FileReader(file);
+        br =new BufferedReader(fr);
         fileToWrite = new File(FILENAME.substring(0,FILENAME.indexOf('.'))+".asm"); //na podstawie nazwy pliku jest tworzony plik z rozszerzeniem .asm
         bw = new BufferedWriter(new FileWriter(fileToWrite));
+
+        Parser parser = new Parser(fr);
+        CodeWriter codeWriter = new CodeWriter();
 
         String data = "";
         while((data = br.readLine())!=null)
         {
 
+            
 
         }
 
