@@ -20,6 +20,18 @@ public class VMtranslator {
     private void parse(File file)
     {
         Parser parser = new  Parser(file);
+        String currentCommand;
+        String commandType;
+
+        while (parser.hasMoreCommand())
+        {
+            currentCommand =parser.advance();
+            //System.out.println(currentCommand);
+            commandType = parser.commandType(currentCommand);
+
+            
+
+        }
     }
 
     /*private static String FILENAME="";
