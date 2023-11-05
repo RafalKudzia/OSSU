@@ -19,7 +19,9 @@ public class VMtranslator {
 
     private void parse(File file)
     {
-        Parser parser = new  Parser(file);
+        parser = new  Parser(file);
+        codeWriter = new CodeWriter(new File(file.getName().split("\\.")[0]+"asm"));
+
         String currentCommand;
         String commandType;
 
@@ -29,7 +31,11 @@ public class VMtranslator {
             //System.out.println(currentCommand);
             commandType = parser.commandType(currentCommand);
 
-            
+            if(commandType.equals("C_PUSH") || commandType.equals("C_POP"))
+            {
+                codeWriter.writePushPop(currentCommand);
+
+            }
 
         }
     }
