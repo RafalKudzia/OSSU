@@ -74,13 +74,15 @@ public class Parser {
 
     String arg1()
     {
-
-        return null;
+        if (typeOfCommand.equals("C_ARITHMETIC"))
+            return command;
+        else
+            return command.split(" ")[1];
     }
 
     int arg2()
     {
-        return 0;
+        return Integer.parseInt(command.split(" ")[2]);
     }
 
 

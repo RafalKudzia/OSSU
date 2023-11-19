@@ -13,14 +13,14 @@ public class VMtranslator {
         {
             filePath = new File(args[0]);
             VMtranslator vmt = new VMtranslator();
-            vmt.parse(filePath);
+            vmt.parseCommand(filePath);
         }
     }
 
-    private void parse(File file)
+    private void parseCommand(File file)
     {
         parser = new  Parser(file);
-        codeWriter = new CodeWriter(new File(file.getName().split("\\.")[0]+"asm"));
+        codeWriter = new CodeWriter(new File(file.getName().split("\\.")[0]+".asm"));
 
         String currentCommand;
         String commandType;
@@ -33,8 +33,12 @@ public class VMtranslator {
 
             if(commandType.equals("C_PUSH") || commandType.equals("C_POP"))
             {
-                codeWriter.writePushPop(currentCommand);
+                codeWriter.writePushPop(commandType, parser.arg1(), parser.arg2());
 
+            }
+            if (commandType.equals("C_ARITHMETIC"))
+            {
+                codeWriter.writeArithmetic(parser.arg1());
             }
 
         }
