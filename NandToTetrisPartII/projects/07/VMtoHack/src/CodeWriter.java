@@ -104,6 +104,59 @@ public class CodeWriter
                 bw.write("M=M+1");
                 bw.flush();
             }
+            if (command.equals("eq"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=D-A");
+                bw.newLine();
+                bw.write("@IF");
+                bw.newLine();
+                bw.write("D;JEQ");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=0");
+                bw.newLine();
+                bw.write("@END");
+                bw.newLine();
+                bw.write("0;JMP");
+                bw.newLine();
+                bw.write("(IF)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=-1");
+                bw.newLine();
+                bw.write("(END)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.newLine();
+                bw.flush();
+            }
+            if (command)
         }
         catch (Exception e)
         {
