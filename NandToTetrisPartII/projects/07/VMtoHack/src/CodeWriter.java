@@ -89,9 +89,7 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("A=M");
                 bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("D=-A");
+                bw.write("D=-M");
                 bw.newLine();
                 bw.write("@SP");
                 bw.newLine();
@@ -122,9 +120,7 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("A=M");
                 bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=D-A");
+                bw.write("D=M-D");
                 bw.newLine();
                 bw.write("@IF");
                 bw.newLine();
@@ -156,7 +152,191 @@ public class CodeWriter
                 bw.newLine();
                 bw.flush();
             }
-            if (command)
+            if (command.equals("lt"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M-D");
+                bw.newLine();
+                bw.write("@IF");
+                bw.newLine();
+                bw.write("D;JEQ");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=0");
+                bw.newLine();
+                bw.write("@END");
+                bw.newLine();
+                bw.write("0;JMP");
+                bw.newLine();
+                bw.write("(IF)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=-1");
+                bw.newLine();
+                bw.write("(END)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.newLine();
+                bw.flush();
+            }
+            if (command.equals("gt"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M-D");
+                bw.newLine();
+                bw.write("@IF");
+                bw.newLine();
+                bw.write("D;JGT");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=0");
+                bw.newLine();
+                bw.write("@END");
+                bw.newLine();
+                bw.write("0;JMP");
+                bw.newLine();
+                bw.write("(IF)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=-1");
+                bw.newLine();
+                bw.write("(END)");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.newLine();
+                bw.flush();
+            }
+            if (command.equals("not"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=!M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=D");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.flush();
+            }
+            if (command.equals("or"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=D|M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=D");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.flush();
+            }
+            if (command.equals("and"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=D&M");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=D");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.flush();
+            }
         }
         catch (Exception e)
         {
