@@ -19,7 +19,7 @@ public class CodeWriter
         //TODO: Write a method to write arithmetic command in assembly language
         try {
             if (command.equals("add")) {
-                bw.write("//" + command);
+                bw.write("//**********" + command);
                 bw.newLine();
                 bw.write("@SP");
                 bw.newLine();
@@ -50,7 +50,7 @@ public class CodeWriter
             }
             if (command.equals("sub"))
             {
-                bw.write("//" + command);
+                bw.write("//**********" + command);
                 bw.newLine();
                 bw.write("@SP");
                 bw.newLine();
@@ -79,6 +79,31 @@ public class CodeWriter
                 bw.write("M=M+1");
                 bw.flush();
             }
+            if (command.equals("neg"))
+            {
+                bw.write("//**********" + command);
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M-1");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("D=M");
+                bw.newLine();
+                bw.write("D=-A");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("A=M");
+                bw.newLine();
+                bw.write("M=D");
+                bw.newLine();
+                bw.write("@SP");
+                bw.newLine();
+                bw.write("M=M+1");
+                bw.flush();
+            }
         }
         catch (Exception e)
         {
@@ -91,7 +116,7 @@ public class CodeWriter
         //TODO: Write a method to write push/pop command in assembly language
         try
         {
-            bw.write("//"+type+" "+ segment+" "+number);
+            bw.write("//**********"+type+" "+ segment+" "+number);
             bw.newLine();
           /*  bw.write("@SP");
             bw.newLine();
