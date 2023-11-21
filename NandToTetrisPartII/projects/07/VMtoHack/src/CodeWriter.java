@@ -18,108 +18,40 @@ public class CodeWriter
     {
         //TODO: Write a method to write arithmetic command in assembly language
         try {
+            writeCommandTypeComment(command);
             if (command.equals("add")) {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=D+M");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.flush();
+                pushDtoTheStack();
             }
             if (command.equals("sub"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=M-D");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.flush();
+                pushDtoTheStack();
             }
             if (command.equals("neg"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=-M");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.flush();
+                pushDtoTheStack();
             }
             if (command.equals("eq"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=M-D");
                 bw.newLine();
                 bw.write("@IF");
@@ -146,30 +78,13 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("(END)");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.newLine();
-                bw.flush();
             }
             if (command.equals("lt"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=M-D");
                 bw.newLine();
                 bw.write("@IF");
@@ -196,30 +111,13 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("(END)");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.newLine();
-                bw.flush();
             }
             if (command.equals("gt"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=M-D");
                 bw.newLine();
                 bw.write("@IF");
@@ -246,94 +144,36 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("(END)");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.newLine();
-                bw.flush();
             }
             if (command.equals("not"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=!M");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.flush();
+                pushDtoTheStack();
             }
             if (command.equals("or"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=D|M");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
-                bw.flush();
+                pushDtoTheStack();
             }
             if (command.equals("and"))
             {
-                writeCommandTypeComment(command);
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("D=M");
-                bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M-1");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
+                decraseStackPointer();
+                getFromStackToD();
+                decraseStackPointer();
+                getFromMemoryToA();
                 bw.write("D=D&M");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("A=M");
-                bw.newLine();
-                bw.write("M=D");
-                bw.newLine();
-                incraseStackPointer();
-                bw.flush();
+                pushDtoTheStack();
             }
+            incraseStackPointer();
         }
         catch (Exception e)
         {
@@ -416,6 +256,61 @@ public class CodeWriter
             bw.write("@SP");
             bw.newLine();
             bw.write("M=M+1");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void decraseStackPointer()
+    {
+        try {
+            bw.write("@SP");
+            bw.newLine();
+            bw.write("M=M-1");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void getFromStackToD()
+    {
+        try {
+            bw.write("A=M");
+            bw.newLine();
+            bw.write("D=M");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private  void pushDtoTheStack()
+    {
+        try {
+            bw.write("@SP");
+            bw.newLine();
+            bw.write("A=M");
+            bw.newLine();
+            bw.write("M=D");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+    private void getFromMemoryToA()
+    {
+        try {
+            bw.write("A=M");
             bw.newLine();
         }
         catch (Exception e)
