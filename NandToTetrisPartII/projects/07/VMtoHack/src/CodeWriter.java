@@ -332,9 +332,7 @@ public class CodeWriter
                 bw.newLine();
                 bw.write("M=D");
                 bw.newLine();
-                bw.write("@SP");
-                bw.newLine();
-                bw.write("M=M+1");
+                incraseStackPointer();
                 bw.flush();
             }
         }
@@ -349,8 +347,9 @@ public class CodeWriter
         //TODO: Write a method to write push/pop command in assembly language
         try
         {
-            bw.write("//**********"+type+" "+ segment+" "+number);
-            bw.newLine();
+            writeCommandTypeComment(type+" "+segment+" "+number);
+          //  bw.write("//**********"+type+" "+ segment+" "+number);
+          //  bw.newLine();
           /*  bw.write("@SP");
             bw.newLine();
             bw.write("M=M-1");
@@ -399,5 +398,34 @@ public class CodeWriter
 
         }
 
+    }
+
+    private void writeCommandTypeComment(String comStr)
+    {
+        try
+        {
+            bw.write("//**********" + comStr);
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+
+    }
+
+    private void incraseStackPointer()
+    {
+        try
+        {
+            bw.write("@SP");
+            bw.newLine();
+            bw.write("M=M+1");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 }
