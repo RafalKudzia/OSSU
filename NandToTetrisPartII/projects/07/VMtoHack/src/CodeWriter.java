@@ -308,8 +308,7 @@ public class CodeWriter
             }
             if (command.equals("and"))
             {
-                bw.write("//**********" + command);
-                bw.newLine();
+                writeCommandTypeComment(command);
                 bw.write("@SP");
                 bw.newLine();
                 bw.write("M=M-1");
@@ -350,22 +349,6 @@ public class CodeWriter
             writeCommandTypeComment(type+" "+segment+" "+number);
           //  bw.write("//**********"+type+" "+ segment+" "+number);
           //  bw.newLine();
-          /*  bw.write("@SP");
-            bw.newLine();
-            bw.write("M=M-1");
-            bw.newLine();
-            bw.write("D=M");
-            bw.newLine();
-            bw.write("M=M-1");
-            bw.newLine();
-            bw.write("D=D+M");
-            bw.newLine();
-            bw.write("M=D");
-            bw.newLine();
-            bw.write("@SP");
-            bw.newLine();
-            bw.write("M=M+1");*/
-
 
             if (type.equals("C_PUSH"))
             {
@@ -398,6 +381,18 @@ public class CodeWriter
 
         }
 
+    }
+
+    void close()
+    {
+        try
+        {
+            bw.close();
+        }
+        catch (Exception e)
+        {
+
+        }
     }
 
     private void writeCommandTypeComment(String comStr)
