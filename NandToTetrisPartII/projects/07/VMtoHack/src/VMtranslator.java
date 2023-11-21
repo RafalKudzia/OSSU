@@ -40,8 +40,9 @@ public class VMtranslator {
             {
                 codeWriter.writeArithmetic(parser.arg1());
             }
-
         }
+        codeWriter.close();
+
     }
 
     /*private static String FILENAME="";
