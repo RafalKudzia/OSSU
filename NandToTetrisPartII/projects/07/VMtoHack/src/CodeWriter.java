@@ -24,10 +24,11 @@ public class CodeWriter
             writeCommandTypeComment(command);
             if (!(command.equals("neg") || command.equals("not")))
             {
-                decraseStackPointer();
+                decrementStackPointer();
                 getFromStackToD();
-                decraseStackPointer();
+                decrementStackPointer();
                 getFromStackToA();
+
                 if (command.equals("eq") || command.equals("lt") || command.equals("gt"))
                 {
                     jumpToIfLabel(command);
@@ -44,11 +45,11 @@ public class CodeWriter
             }
             else
             {
-                decraseStackPointer();
+                decrementStackPointer();
                 getFromStackToA();
                 compute(command);
             }
-            incraseStackPointer();
+            incrementStackPointer();
         }
         catch (Exception e)
         {
@@ -62,21 +63,31 @@ public class CodeWriter
         try
         {
             writeCommandTypeComment(type+" "+segment+" "+number);
-          //  bw.write("//**********"+type+" "+ segment+" "+number);
-          //  bw.newLine();
 
             if (type.equals("C_PUSH"))
             {
-                if(segment.equals("constant"))
+                if(!segment.equals("constant"))
+                {
+                    getFromMemoryToD(segment,number);
+                }
+                else
                 {
                     bw.write("@"+number);
                     bw.newLine();
                     bw.write("D=A");
                     bw.newLine();
-                    pushDtoTheStack();
-                    incraseStackPointer();
                 }
+                pushDtoTheStack();
+                incrementStackPointer();
+
             }
+            if (type.equals("C_POP"))
+            {
+
+                    setMemoryAddress(segment,number);
+                     decrementStackPointer();
+                    pushFromStackToMemory();}
+
         }
         catch (Exception e)
         {
@@ -97,6 +108,115 @@ public class CodeWriter
         }
     }
 
+    private void pushFromStackToMemory()
+    {
+        try {
+            getFromStackToD();
+            bw.write("@R13");
+            bw.newLine();
+            bw.write("A=M");
+            bw.newLine();
+            bw.write("M=D");
+            bw.newLine();
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+
+    private void setMemoryAddress(String seg,int index)
+    {
+        try {
+            if (seg.equals("local")) {
+                bw.write("@LCL");
+                bw.newLine();
+            }
+            if (seg.equals("argument")) {
+                bw.write("@ARG");
+                bw.newLine();
+            }
+            if (seg.equals("this")) {
+
+                bw.write("@THIS");
+                bw.newLine();
+            }
+            if (seg.equals("that")) {
+
+                bw.write("@THAT");
+                bw.newLine();
+
+            }
+
+            if (seg.equals("temp")) {
+
+                bw.write("@5");
+                bw.newLine();
+                bw.write("D=A");
+                bw.newLine();
+            }
+            else {
+
+                bw.write("D=M");
+                bw.newLine();
+            }
+            bw.write("@" + index);
+            bw.newLine();
+            bw.write("D=A+D");
+            bw.newLine();
+            bw.write("@R13");
+            bw.newLine();
+            bw.write("M=D");
+            bw.newLine();
+
+        }
+        catch (Exception e)
+        {
+
+        }
+    }
+    private void getFromMemoryToD(String seg,int index)
+    {
+        try {
+            if (seg.equals("local")) {
+
+                bw.write("@LCL");
+                bw.newLine();
+            }
+            if (seg.equals("argument")) {
+                bw.write("@ARG");
+                bw.newLine();
+            }
+            if (seg.equals("this")) {
+                bw.write("@THIS");
+                bw.newLine();
+            }
+            if (seg.equals("that")) {
+                bw.write("@THAT");
+                bw.newLine();
+            }
+            if (seg.equals("temp")) {
+                bw.write("@5");
+                bw.newLine();
+                bw.write("D=A");
+                bw.newLine();
+            }
+            else {
+                bw.write("D=M");
+                bw.newLine();
+            }
+            bw.write("@" + index);
+            bw.newLine();
+            bw.write("A=A+D");
+            bw.newLine();
+            bw.write("D=M");
+            bw.newLine();
+        }
+        catch (Exception e){
+
+        }
+    }
+
     private void writeCommandTypeComment(String comStr)
     {
         try
@@ -111,7 +231,7 @@ public class CodeWriter
 
     }
 
-    private void incraseStackPointer()
+    private void incrementStackPointer()
     {
         try
         {
@@ -126,9 +246,10 @@ public class CodeWriter
         }
     }
 
-    private void decraseStackPointer()
+    private void decrementStackPointer()
     {
         try {
+
             bw.write("@SP");
             bw.newLine();
             bw.write("M=M-1");
@@ -143,6 +264,8 @@ public class CodeWriter
     private void getFromStackToD()
     {
         try {
+            bw.write("@SP");
+            bw.newLine();
             bw.write("A=M");
             bw.newLine();
             bw.write("D=M");
@@ -172,6 +295,8 @@ public class CodeWriter
     private void getFromStackToA()
     {
         try {
+            bw.write("@SP");
+            bw.newLine();
             bw.write("A=M");
             bw.newLine();
         }
