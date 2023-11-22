@@ -62,32 +62,66 @@ public class CodeWriter
         //TODO: Write a method to write push/pop command in assembly language
         try
         {
-            writeCommandTypeComment(type+" "+segment+" "+number);
+            writeCommandTypeComment(type.toLowerCase().substring(2)+" "+segment+" "+number);
 
             if (type.equals("C_PUSH"))
             {
-                if(!segment.equals("constant"))
+                if (segment.equals("pointer"))
                 {
-                    getFromMemoryToD(segment,number);
-                }
-                else
-                {
-                    bw.write("@"+number);
-                    bw.newLine();
-                    bw.write("D=A");
-                    bw.newLine();
-                }
-                pushDtoTheStack();
-                incrementStackPointer();
+                    if (number == 0)
+                    {
+                        bw.write("@THIS");
+                        bw.newLine();
+                        bw.write("D=M");
+                        bw.newLine();
+                    }
+                    if (number == 1)
+                    {
+                        bw.write("@THAT");
+                        bw.newLine();
+                        bw.write("D=M");
+                        bw.newLine();
 
+                    }
+                    pushDtoTheStack();
+                    incrementStackPointer();
+                }
+                else {
+                    if (!segment.equals("constant")) {
+                        getFromMemoryToD(segment, number);
+                    } else {
+                        bw.write("@" + number);
+                        bw.newLine();
+                        bw.write("D=A");
+                        bw.newLine();
+                    }
+                    pushDtoTheStack();
+                    incrementStackPointer();
+                }
             }
-            if (type.equals("C_POP"))
-            {
+            if (type.equals("C_POP")) {
+                if (segment.equals("pointer")) {
+                    decrementStackPointer();
+                    getFromStackToD();
+                    if (number == 0) {
+                        bw.write("@THIS");
+                        bw.newLine();
+                        bw.write("M=D");
+                        bw.newLine();
 
-                    setMemoryAddress(segment,number);
-                     decrementStackPointer();
-                    pushFromStackToMemory();}
-
+                    }
+                    if (number == 1) {
+                        bw.write("@THAT");
+                        bw.newLine();
+                        bw.write("M=D");
+                        bw.newLine();
+                    }
+                } else {
+                    setMemoryAddress(segment, number);
+                    decrementStackPointer();
+                    pushFromStackToMemory();
+                }
+            }
         }
         catch (Exception e)
         {
