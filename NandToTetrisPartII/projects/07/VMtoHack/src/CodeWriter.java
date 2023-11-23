@@ -5,11 +5,13 @@ public class CodeWriter
     BufferedWriter bw;
     private static  int iForEndLabel = 0;
     private static  int iForIfLabel = 0;
+    private static String staticVariableName;
 
     public CodeWriter(File fw)
     {
         try{
             bw=new BufferedWriter(new FileWriter(fw));
+            staticVariableName = fw.getName().split("\\.")[0];
         }
         catch (Exception e)
         {
@@ -66,7 +68,18 @@ public class CodeWriter
 
             if (type.equals("C_PUSH"))
             {
-                if (segment.equals("pointer"))
+
+                if (segment.equals("static"))
+                {
+                    bw.write("@"+staticVariableName+"."+number);
+                    bw.newLine();
+                    bw.write("D=M");
+                    bw.newLine();
+                   // pushDtoTheStack();
+                    //incrementStackPointer();
+
+                }
+                else if (segment.equals("pointer"))
                 {
                     if (number == 0)
                     {
@@ -86,8 +99,7 @@ public class CodeWriter
                     pushDtoTheStack();
                     incrementStackPointer();
                 }
-                else {
-                    if (!segment.equals("constant")) {
+                else if (!segment.equals("constant")) {
                         getFromMemoryToD(segment, number);
                     } else {
                         bw.write("@" + number);
@@ -97,31 +109,40 @@ public class CodeWriter
                     }
                     pushDtoTheStack();
                     incrementStackPointer();
-                }
+
             }
             if (type.equals("C_POP")) {
-                if (segment.equals("pointer")) {
+                if (segment.equals("static")) {
                     decrementStackPointer();
                     getFromStackToD();
-                    if (number == 0) {
-                        bw.write("@THIS");
-                        bw.newLine();
-                        bw.write("M=D");
-                        bw.newLine();
-
-                    }
-                    if (number == 1) {
-                        bw.write("@THAT");
-                        bw.newLine();
-                        bw.write("M=D");
-                        bw.newLine();
-                    }
-                } else {
-                    setMemoryAddress(segment, number);
-                    decrementStackPointer();
-                    pushFromStackToMemory();
+                    bw.write("@"+staticVariableName+"."+number);
+                    bw.newLine();
+                    bw.write("M=D");
+                    bw.newLine();
                 }
-            }
+                else if (segment.equals("pointer")) {
+                        decrementStackPointer();
+                        getFromStackToD();
+                        if (number == 0) {
+                            bw.write("@THIS");
+                            bw.newLine();
+                            bw.write("M=D");
+                            bw.newLine();
+
+                        }
+                        if (number == 1) {
+                            bw.write("@THAT");
+                            bw.newLine();
+                            bw.write("M=D");
+                            bw.newLine();
+                        }
+                    } else {
+                        setMemoryAddress(segment, number);
+                        decrementStackPointer();
+                        pushFromStackToMemory();
+                    }
+                }
+
         }
         catch (Exception e)
         {
